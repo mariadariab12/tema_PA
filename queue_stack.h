@@ -5,6 +5,14 @@
 #include<limits.h>
 #include"struct.h"
 
+//list
+void addAtBeginning(Node **head, Data v);
+void addAtEnd(Node** head, Data v);
+
+//check
+void lista_null(Node* head_list);
+void fisier_null(FILE* read_file);
+
 //queue
 //QGame* createQueue_Game();
 void enQueue(QGame**q, Team team_1, Team team_2);

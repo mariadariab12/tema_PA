@@ -1,5 +1,49 @@
 #include"queue_stack.h"
 
+//list
+void addAtBeginning(Node **head, Data v)
+{
+    Node *newNode = (Node *)malloc(sizeof(Node));
+    newNode->val = v;
+    newNode->next = *head;
+    *head = newNode;
+}
+
+void addAtEnd(Node **head, Data v)
+{
+    Node *aux = *head;
+    Node *newNode = (Node *)malloc(sizeof(Node));
+    newNode->val = v;
+    if (*head == NULL)
+        addAtBeginning(&*head, v);
+    else
+    {
+        while (aux->next != NULL)
+            aux = aux->next;
+        aux->next = newNode;
+        newNode->next = NULL;
+    }
+}
+
+//check
+void lista_null(Node *head_list)
+{
+    if (head_list == NULL)
+    {
+        printf("Failed to allocate memory for head_list\n");
+        exit(1);
+    }
+}
+
+void fisier_null(FILE *read_file)
+{
+    if (read_file == NULL)
+    {
+        printf("Error opening file\n");
+        exit(1);
+    }
+}
+
 //queue
 /*
 QGame* createQueue_Game(){

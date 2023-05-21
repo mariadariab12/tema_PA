@@ -1,47 +1,5 @@
 #include "library.h"
 
-void addAtBeginning(Node **head, Data v)
-{
-    Node *newNode = (Node *)malloc(sizeof(Node));
-    newNode->val = v;
-    newNode->next = *head;
-    *head = newNode;
-}
-
-void addAtEnd(Node **head, Data v)
-{
-    Node *aux = *head;
-    Node *newNode = (Node *)malloc(sizeof(Node));
-    newNode->val = v;
-    if (*head == NULL)
-        addAtBeginning(&*head, v);
-    else
-    {
-        while (aux->next != NULL)
-            aux = aux->next;
-        aux->next = newNode;
-        newNode->next = NULL;
-    }
-}
-
-void lista_null(Node *head_list)
-{
-    if (head_list == NULL)
-    {
-        printf("Failed to allocate memory for head_list\n");
-        exit(1);
-    }
-}
-
-void fisier_null(FILE *read_file)
-{
-    if (read_file == NULL)
-    {
-        printf("Error opening file\n");
-        exit(1);
-    }
-}
-
 void atribuire_juc(FILE *read_file, Team echipa, int j)
 {
     int points;
@@ -119,11 +77,22 @@ void display_list(Node *head)
     }
 }
 
-int task1(FILE *read_file, Node **head_list)
+void f_display_list(Node *head, FILE* write_file)
+{
+    while (head != NULL)
+    {
+        fprintf(write_file, "%s", head->val.nume_echipa);
+        fprintf(write_file, "\n");
+        head = head->next;
+    }
+}
+
+
+int task1(FILE *read_file, Node **head_list, FILE *write_file)
 {
     int nr_echipe = team_file_read(read_file, head_list);
 
-    // display_list(*head_list);
+    //f_display_list(*head_list, write_file);
 
     return nr_echipe;
 }
@@ -198,7 +167,7 @@ int calculare_N(int nr_echipe)
     return j - 1;
 }
 
-void task2(Node **head_list, int *nr_echipe)
+void task2(Node **head_list, int *nr_echipe, FILE* write_file)
 {
     int N = calculare_N((*nr_echipe));
 
@@ -241,14 +210,14 @@ void task2(Node **head_list, int *nr_echipe)
         }
     }
 
-    display_list(*head_list);
+    f_display_list(*head_list, write_file);
 
     printf("\n nr echipe: %d\n", (*nr_echipe));
 }
 
 // task3
 
-void creare_meciuri(QGame **q, Node *head_list)
+void creare_meciuri(QGame **q, Node *head_list, FILE* write_file)
 {
     (*q)=(QGame *)malloc(sizeof(QGame));
 	if ((*q)==NULL) 
@@ -259,6 +228,10 @@ void creare_meciuri(QGame **q, Node *head_list)
 
 	(*q)->front=(*q)->rear=NULL;
 
+    int nr=33;
+    fprintf(write_file, "\n--- ROUND NO:1\n");
+
+
     while (head_list != NULL)
     {
         enQueue(q, head_list->val, head_list->next->val);
@@ -268,13 +241,23 @@ void creare_meciuri(QGame **q, Node *head_list)
             printf("break");
         }
 
+        fprintf(write_file, "%s", head_list->val.nume_echipa);
+        int nr_spatii = nr - strlen(head_list->val.nume_echipa);
+        fprintf(write_file, "%*s", nr_spatii, " ");
+        fprintf(write_file, "-");
+
+        nr_spatii = nr -strlen(head_list->next->val.nume_echipa);
+        fprintf(write_file, "%*s", nr_spatii, " ");
+        fprintf(write_file, "%s", head_list->next->val.nume_echipa);
+        fprintf(write_file, "\n");
+
         head_list = (head_list->next)->next;
     }
 }
 
 int winner(Team team_1, Team team_2)
 {
-    if(team_1.punctaj_echipa >= team_2.punctaj_echipa)
+    if(team_1.punctaj_echipa > team_2.punctaj_echipa)
         return 1;
     
     return 2;
@@ -332,7 +315,7 @@ void runda(QGame *q, Node** top_win, Node** top_lose)
 
 }
 
-void move_win_to_queue(QGame **q, Node **top_win)
+void move_win_to_queue_and_fdisplay(QGame **q, Node **top_win, FILE* write_file)
 {
     (*q)=(QGame *)malloc(sizeof(QGame));
 	if ((*q)==NULL) 
@@ -342,32 +325,46 @@ void move_win_to_queue(QGame **q, Node **top_win)
     }
 
     Team add_team1, add_team2;
-    int i=1;
+    int i=1, nr=33;
 
     while(!isEmpty_stack(*top_win))
     {
         add_team1 = pop(top_win);
-        
-        printf("%d\n", i);
-        i++;
+
         if(isEmpty_stack(*top_win) == 1) break;
+
+        fprintf(write_file, "%s", add_team1.nume_echipa);
+        int nr_spatii = nr - strlen(add_team1.nume_echipa);
+        fprintf(write_file, "%*s", nr_spatii, " ");
+        fprintf(write_file, "-");
+
         add_team2 = pop(top_win);
-        printf("%d\n", i);
-        i++;
+
+        nr_spatii = nr -strlen(add_team2.nume_echipa);
+        fprintf(write_file, "%*s", nr_spatii, " ");
+        fprintf(write_file, "%s", add_team2.nume_echipa);
+        fprintf(write_file, "\n");
+
         enQueue(q, add_team1, add_team2);
     }
 
 }
 
 
-void task3(QGame **q, int *nr_echipe, Node **top_win)
+void task3(QGame **q, int *nr_echipe, Node **top_win, FILE* write_file)
 {
     Node *top_lose;
+    int i=2;
+    (*nr_echipe) /= 2;
+
     while((*nr_echipe) != 1)
     {
+        fprintf(write_file, "\n--- ROUND NO:%d\n", i);
+        i++;
+
         runda(*q, top_win, &top_lose);
         deleteQueue(q);
-        move_win_to_queue(q, top_win);
+        move_win_to_queue_and_fdisplay(q, top_win, write_file);
 
         (*nr_echipe) /= 2;
     }
