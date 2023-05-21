@@ -275,7 +275,7 @@ void add_pct_winner(Team *team)
 
 }
 
-void runda(QGame *q, Node** top_win, Node** top_lose)
+void runda(QGame *q, Node** top_win, Node** top_lose, int i, FILE* write_file)
 {
     Node_Game* aux = q->front;
 	if (isEmpty_queue(q)) return;
@@ -297,16 +297,19 @@ void runda(QGame *q, Node** top_win, Node** top_lose)
         team_2=aux->team2;
         aux = aux->next;
 
+    
     if(winner(team_1, team_2) == 1) 
     {
         add_pct_winner(&team_1);
         push(top_win, team_1);
+        //afisare_winners(team_1, i, write_file);
         push(top_lose, team_2);
     }
     else
     {
         add_pct_winner(&team_2);
         push(top_win, team_2);
+        //afisare_winners(team_2, i, write_file);
         push(top_lose, team_1);
     }
     }
@@ -345,8 +348,47 @@ void move_win_to_queue_and_fdisplay(QGame **q, Node **top_win, FILE* write_file)
         fprintf(write_file, "%s", add_team2.nume_echipa);
         fprintf(write_file, "\n");
 
+        //afisare_winners(add_team1, write_file);
+        //afisare_winners(add_team2, write_file);
+
+
         enQueue(q, add_team1, add_team2);
     }
+
+}
+
+void afisare_winners(Team team, FILE* write_file)
+{
+    int nr=34, nr_spatii;
+    fprintf(write_file, "%s", team.nume_echipa);
+    nr_spatii = nr -strlen(team.nume_echipa);
+    fprintf(write_file, "%*s", nr_spatii, " ");
+    fprintf(write_file, "-  ");
+    fprintf(write_file, "%.2f\n", team.punctaj_echipa);
+}
+
+void afisare_win_round(Node *top_win, int i, FILE* write_file)
+{
+    Team add_team1, add_team2, winner;
+    int nr=33;
+
+    fprintf(write_file, "\nWINNERS OF ROUND NO:%d\n", i-1);
+
+    while(!isEmpty_stack(top_win))
+    {
+        add_team1 = pop(&top_win);
+        afisare_winners(add_team1, write_file);
+
+        if(isEmpty_stack(top_win) == 1) 
+        {
+            break;
+        }
+       
+        add_team2 = pop(&top_win);
+        afisare_winners(add_team2, write_file);
+
+    }
+
 
 }
 
@@ -356,17 +398,26 @@ void task3(QGame **q, int *nr_echipe, Node **top_win, FILE* write_file)
     Node *top_lose;
     int i=2;
     (*nr_echipe) /= 2;
+    Team winner;
 
     while((*nr_echipe) != 1)
     {
+        runda(*q, top_win, &top_lose, i, write_file);
+        deleteQueue(q);
+
+        afisare_win_round(*top_win, i, write_file);
+
         fprintf(write_file, "\n--- ROUND NO:%d\n", i);
         i++;
-
-        runda(*q, top_win, &top_lose);
-        deleteQueue(q);
         move_win_to_queue_and_fdisplay(q, top_win, write_file);
+
+        /*
+        if((*nr_echipe) == 2)
+            afisare_winners(top(*top_win), write_file);
+        */
 
         (*nr_echipe) /= 2;
     }
+
 
 }

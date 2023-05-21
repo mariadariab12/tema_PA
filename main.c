@@ -24,8 +24,8 @@ int main()
     //printf("%d", (q->front == NULL));
     Node* top_win;
     Node *top_lose;
-    runda(q, &top_win, &top_lose);
-    display_stack(top_win);
+    //runda(q, &top_win, &top_lose);
+    //display_stack(top_win);
     //printf("\n lose:\n");
     //display_stack(top_lose);
     //printf("%d\n", (q->front == NULL));

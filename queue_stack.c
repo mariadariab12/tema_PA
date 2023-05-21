@@ -142,7 +142,7 @@ Data pop(Node**top) {
 	Node *temp=(*top);
 	Data aux=temp->val;
 	*top=(*top)->next;
-	free(temp);
+	//free(temp);
 	return aux;
     }
 }
