@@ -1,6 +1,7 @@
 #include"queue_stack.h"
 
 //queue
+/*
 QGame* createQueue_Game(){
 	QGame **q;
 	(*q)=(QGame *)malloc(sizeof(QGame));
@@ -9,6 +10,7 @@ QGame* createQueue_Game(){
 
 	return (*q);
 }
+*/
 
 void enQueue(QGame **q, Team team_1, Team team_2){
 	Node_Game* newNode=(Node_Game*)malloc(sizeof(Node_Game));
@@ -39,14 +41,14 @@ void deQueue(QGame *q, Team* team_1, Team* team_2) //team_1 si team_2 trebuie tr
 	free(aux);
 }
 
-void deleteQueue(QGame *q){
+void deleteQueue(QGame **q){
 	Node_Game* aux;
-	while (!isEmpty_queue(q)){
-		aux=q->front;
-		q->front=q->front->next;
+	while (!isEmpty_queue(*q)){
+		aux=(*q)->front;
+		(*q)->front=(*q)->front->next;
 		free(aux);
 	}
-	free(q);
+
 }
 
 void displayQueue(QGame *q) {

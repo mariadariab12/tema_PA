@@ -15,11 +15,13 @@ int calculare_N(int nr_echipe);
 void calcul_punctaj_echipa(Node** head_list);
 float punctaj_min(Node* head_list);
 void eliminare_primul(Node** head_list);
-void eliminare_echipa(Node** nod_anterior);
-void task2(Node** head_list, int nr_echipe);
+void eliminare_urmator(Node** nod_anterior);
+void task2(Node** head_list, int *nr_echipe);
 
 //task3
 void creare_meciuri(QGame **q, Node* head_list);
 int winner(Team team_1, Team team_2);
 void add_pct_winner(Team *team);
 void runda(QGame *q, Node** top_win, Node** top_lose);
+void move_win_to_queue(QGame **q, Node **top_win);
+void task3(QGame **q, int *nr_echipe, Node **top_win);

@@ -6,11 +6,11 @@
 #include"struct.h"
 
 //queue
-QGame* createQueue_Game();
+//QGame* createQueue_Game();
 void enQueue(QGame**q, Team team_1, Team team_2);
 int isEmpty_queue(QGame* q);
 void deQueue(QGame *q, Team* team_1, Team* team_2);
-void deleteQueue(QGame *q);
+void deleteQueue(QGame **q);
 void displayQueue(QGame *q);
 
 //stack

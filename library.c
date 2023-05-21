@@ -175,7 +175,7 @@ void eliminare_primul(Node **head_list)
     free(primul_nod);
 }
 
-void eliminare_echipa(Node **nod_anterior)
+void eliminare_urmator(Node **nod_anterior)
 {
     if (*nod_anterior != NULL && (*nod_anterior)->next != NULL)
     {
@@ -198,11 +198,11 @@ int calculare_N(int nr_echipe)
     return j - 1;
 }
 
-void task2(Node **head_list, int nr_echipe)
+void task2(Node **head_list, int *nr_echipe)
 {
-    int N = calculare_N(nr_echipe);
+    int N = calculare_N((*nr_echipe));
 
-    int nr_ech_el = nr_echipe - pow(2, N);
+    int nr_ech_el = (*nr_echipe) - pow(2, N);
 
     int contor_ech_el = 0, i;
 
@@ -217,19 +217,19 @@ void task2(Node **head_list, int nr_echipe)
         {
             eliminare_primul(head_list);
             contor_ech_el++;
-            nr_echipe--;
+            (*nr_echipe)--;
         }
 
         Node *aux = *head_list;
 
-        for (i = 0; i < nr_echipe && contor_ech_el < nr_ech_el; i++)
+        for (i = 0; i < (*nr_echipe) && contor_ech_el < nr_ech_el; i++)
         {
 
             if (aux->next->val.punctaj_echipa == min)
             {
-                eliminare_echipa(&aux);
+                eliminare_urmator(&aux);
                 contor_ech_el++;
-                nr_echipe--;
+                (*nr_echipe)--;
             }
 
             if (aux->next->next == NULL)
@@ -243,7 +243,7 @@ void task2(Node **head_list, int nr_echipe)
 
     display_list(*head_list);
 
-    printf("\n nr echipe: %d\n", nr_echipe);
+    printf("\n nr echipe: %d\n", (*nr_echipe));
 }
 
 // task3
@@ -313,8 +313,6 @@ void runda(QGame *q, Node** top_win, Node** top_lose)
 	    team_1=aux->team1;
         team_2=aux->team2;
         aux = aux->next;
-    //printf("Meciul %d:\n", i);
-    //i++;
 
     if(winner(team_1, team_2) == 1) 
     {
@@ -330,26 +328,48 @@ void runda(QGame *q, Node** top_win, Node** top_lose)
     }
     }
 
-    //deleteStack(&top_lose);
+    deleteStack(top_lose);
 
 }
 
-/*
-void eliminare_lose(QGame *q, Node *top_lose)
+void move_win_to_queue(QGame **q, Node **top_win)
 {
-    while()    
-}
-
-
-void task3(QGame *q, int nr_echipe)
-{
-    Node *top_win, *top_lose;
-    while(nr_echipe != 1)
+    (*q)=(QGame *)malloc(sizeof(QGame));
+	if ((*q)==NULL) 
     {
-        runda(q, &top_win, &top_lose);
+        printf("Failed to allocate memory for head_list\n");
+        exit(1);
+    }
 
-        nr_echipe /= 2;
+    Team add_team1, add_team2;
+    int i=1;
+
+    while(!isEmpty_stack(*top_win))
+    {
+        add_team1 = pop(top_win);
+        
+        printf("%d\n", i);
+        i++;
+        if(isEmpty_stack(*top_win) == 1) break;
+        add_team2 = pop(top_win);
+        printf("%d\n", i);
+        i++;
+        enQueue(q, add_team1, add_team2);
     }
 
 }
-*/
+
+
+void task3(QGame **q, int *nr_echipe, Node **top_win)
+{
+    Node *top_lose;
+    while((*nr_echipe) != 1)
+    {
+        runda(*q, top_win, &top_lose);
+        deleteQueue(q);
+        move_win_to_queue(q, top_win);
+
+        (*nr_echipe) /= 2;
+    }
+
+}
