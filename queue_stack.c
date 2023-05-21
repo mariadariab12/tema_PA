@@ -160,6 +160,7 @@ void deleteStack(Node**top)
 
 void display_stack(Node *top)
 {
+    if(isEmpty_stack(top)) printf("is empty!");
     while(!isEmpty_stack(top))
     {
         printf("%s\n", (pop(&top)).nume_echipa);

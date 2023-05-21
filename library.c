@@ -392,32 +392,108 @@ void afisare_win_round(Node *top_win, int i, FILE* write_file)
 
 }
 
+void copiere_stiva(Node *top, Node **top_copy)
+{
+    while(!isEmpty_stack(top))
+    {
+        //push(top_copy, pop(&top));
+        addAtEnd(top_copy, pop(&top));
+    }
+
+}
+
+/*
+void ordonare(Node *head_list)
+{
+    Node *comp, *aux;
+    int ord, ok;
+
+    do{
+        comp = head_list;
+        ok=1;
+        while(comp != NULL)
+        {
+            if(comp->val.punctaj_echipa > comp->next->val.punctaj_echipa)
+            {
+                aux = comp;
+                comp = comp->next;
+
+            }
+        }
+
+    }
+
+    do{
+    comp=prim;
+
+      ord=1;
+
+      while(c->next)
+
+             {if(c->info > c->next->info)
+
+                        {aux=c->info;
+
+                        c->info=c->next->info;
+
+                        c->next->info=aux;
+
+                        ord=0;
+
+                        }
+
+              c=c->next;}
+
+      }
+
+    while(ok==0);
+
+  }
+*/
 
 void task3(QGame **q, int *nr_echipe, Node **top_win, FILE* write_file)
 {
-    Node *top_lose;
+    Node *top_lose, *top_copy;
+
+    top_copy = (Node *)malloc(sizeof(Node));
+    lista_null(top_copy); // check
+    top_copy = NULL;
+
     int i=2;
     (*nr_echipe) /= 2;
-    Team winner;
+    Team team;
 
-    while((*nr_echipe) != 1)
+    while((*nr_echipe) != 0)
     {
+        
         runda(*q, top_win, &top_lose, i, write_file);
         deleteQueue(q);
 
+        if((*nr_echipe) == 8)
+        {
+            copiere_stiva(*top_win, &top_copy);
+        }
+
         afisare_win_round(*top_win, i, write_file);
+
+        if((*nr_echipe) == 1) break;
 
         fprintf(write_file, "\n--- ROUND NO:%d\n", i);
         i++;
-        move_win_to_queue_and_fdisplay(q, top_win, write_file);
 
-        /*
-        if((*nr_echipe) == 2)
-            afisare_winners(top(*top_win), write_file);
-        */
+        move_win_to_queue_and_fdisplay(q, top_win, write_file); 
+
 
         (*nr_echipe) /= 2;
     }
 
+    fprintf(write_file, "\nTOP 8 TEAMS:\n");
+    while(!isEmpty_stack(top_copy))
+    {
+        team = top_copy->val;
+        afisare_winners(team, write_file);
+
+        top_copy = top_copy->next;
+    }
 
 }
