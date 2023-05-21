@@ -2,25 +2,25 @@
 
 //queue
 QGame* createQueue_Game(){
-	QGame *q;
-	q=(QGame *)malloc(sizeof(QGame));
-	if (q==NULL) return NULL;
-	q->front=q->rear=NULL;
+	QGame **q;
+	(*q)=(QGame *)malloc(sizeof(QGame));
+	if ((*q)==NULL) return NULL;
+	(*q)->front=(*q)->rear=NULL;
 
-	return q;
+	return (*q);
 }
 
-void enQueue(QGame*q, Team team_1, Team team_2){
+void enQueue(QGame **q, Team team_1, Team team_2){
 	Node_Game* newNode=(Node_Game*)malloc(sizeof(Node_Game));
 	newNode->team1=team_1;
     newNode->team2=team_2;
 	newNode->next=NULL;
-	if (q->rear==NULL) q->rear=newNode;
+	if ((*q)->rear==NULL) (*q)->rear=newNode;
 	else{
-		(q->rear)->next=newNode;
-		(q->rear)=newNode;
+		((*q)->rear)->next=newNode;
+		((*q)->rear)=newNode;
 	}
-	if (q->front==NULL) q->front=q->rear;
+	if ((*q)->front==NULL) (*q)->front=(*q)->rear;
 }
 
 int isEmpty_queue(QGame* q){
@@ -49,51 +49,27 @@ void deleteQueue(QGame *q){
 	free(q);
 }
 
-void displayQueue(QGame *q)
-{
-    Node_Game* aux;
-	if (isEmpty_queue(q)) return;
-    QGame *aux_q=q;
+void displayQueue(QGame *q) {
+    Node_Game* aux = q->front;
     Team team_1, team_2;
-    int i=1;
+    int i = 1;
 
-	while(aux_q->front != NULL)
-    {
-    aux=aux_q->front;
-	team_1=aux->team1;
-    team_2=aux->team2;
-	aux_q->front=(aux_q->front)->next;
-    printf("Meciul %d:\n", i);
-    i++;
-    printf("Echipa 1: %s\n", team_1.nume_echipa);
-    printf("Echipa 2: %s\n", team_2.nume_echipa);
+    if (isEmpty_queue(q)) {
+        printf("The queue is empty!\n");
+        return;
     }
 
-}
-
-/*
-void displayQueue(QGame q)
-{
-    Node_Game* aux;
-	if (isEmpty_queue(&q)) return;
-    QGame *aux_q=q;
-    Team team_1, team_2;
-    int i=1;
-
-	while(aux_q->front != NULL)
-    {
-    aux=aux_q->front;
-	team_1=aux->team1;
-    team_2=aux->team2;
-	aux_q->front=(aux_q->front)->next;
-    printf("Meciul %d:\n", i);
-    i++;
-    printf("Echipa 1: %s\n", team_1.nume_echipa);
-    printf("Echipa 2: %s\n", team_2.nume_echipa);
+    while (aux != NULL) {
+        team_1 = aux->team1;
+        team_2 = aux->team2;
+        printf("Meciul %d:\n", i);
+        i++;
+        printf("Echipa 1: %s\n", team_1.nume_echipa);
+        printf("Echipa 2: %s\n", team_2.nume_echipa);
+        aux = aux->next;
     }
-
 }
-*/
+
 //stack
 
 int isEmpty_stack(Node* top){

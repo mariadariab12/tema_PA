@@ -248,8 +248,17 @@ void task2(Node **head_list, int nr_echipe)
 
 // task3
 
-void creare_meciuri(QGame *q, Node *head_list)
+void creare_meciuri(QGame **q, Node *head_list)
 {
+    (*q)=(QGame *)malloc(sizeof(QGame));
+	if ((*q)==NULL) 
+    {
+        printf("Failed to allocate memory for head_list\n");
+        exit(1);
+    }
+
+	(*q)->front=(*q)->rear=NULL;
+
     while (head_list != NULL)
     {
         enQueue(q, head_list->val, head_list->next->val);
@@ -285,7 +294,7 @@ void add_pct_winner(Team *team)
 
 void runda(QGame *q, Node** top_win, Node** top_lose)
 {
-    Node_Game* aux;
+    Node_Game* aux = q->front;
 	if (isEmpty_queue(q)) return;
     QGame *aux_q=q;
     Team team_1, team_2;
@@ -299,12 +308,11 @@ void runda(QGame *q, Node** top_win, Node** top_lose)
     lista_null(*top_lose); // check
     *top_lose = NULL;
 
-	while(aux_q->front != NULL)
+    while (aux != NULL)
     {
-    aux=aux_q->front;
-	team_1=aux->team1;
-    team_2=aux->team2;
-	aux_q->front=(aux_q->front)->next;
+	    team_1=aux->team1;
+        team_2=aux->team2;
+        aux = aux->next;
     //printf("Meciul %d:\n", i);
     //i++;
 

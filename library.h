@@ -19,7 +19,7 @@ void eliminare_echipa(Node** nod_anterior);
 void task2(Node** head_list, int nr_echipe);
 
 //task3
-void creare_meciuri(QGame *q, Node* head_list);
+void creare_meciuri(QGame **q, Node* head_list);
 int winner(Team team_1, Team team_2);
 void add_pct_winner(Team *team);
-void meciuri(QGame *q, Node** top_win, Node** top_lose);
+void runda(QGame *q, Node** top_win, Node** top_lose);

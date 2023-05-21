@@ -16,15 +16,19 @@ int main()
     fclose(read_file);
 
     QGame *q;
-    q = createQueue_Game();
-    creare_meciuri(q, head_list);
+
+    creare_meciuri(&q, head_list);
     displayQueue(q);
-    printf("%d", isEmpty_queue(q));
+    printf("\n\n");
+    displayQueue(q);
+    printf("%d", (q->front == NULL));
     Node* top_win;
     Node *top_lose;
-    //meciuri(q, &top_win, &top_lose);
-    //display_stack(top_win);
-    //display_stack(top_lose);
+    runda(q, &top_win, &top_lose);
+    display_stack(top_win);
+    display_stack(top_lose);
+    printf("%d", (q->front == NULL));
+
 
     return 0;
 

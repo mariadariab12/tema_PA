@@ -7,7 +7,7 @@
 
 //queue
 QGame* createQueue_Game();
-void enQueue(QGame*q, Team team_1, Team team_2);
+void enQueue(QGame**q, Team team_1, Team team_2);
 int isEmpty_queue(QGame* q);
 void deQueue(QGame *q, Team* team_1, Team* team_2);
 void deleteQueue(QGame *q);
