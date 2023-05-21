@@ -348,10 +348,6 @@ void move_win_to_queue_and_fdisplay(QGame **q, Node **top_win, FILE* write_file)
         fprintf(write_file, "%s", add_team2.nume_echipa);
         fprintf(write_file, "\n");
 
-        //afisare_winners(add_team1, write_file);
-        //afisare_winners(add_team2, write_file);
-
-
         enQueue(q, add_team1, add_team2);
     }
 
@@ -389,67 +385,148 @@ void afisare_win_round(Node *top_win, int i, FILE* write_file)
 
     }
 
-
 }
 
 void copiere_stiva(Node *top, Node **top_copy)
 {
     while(!isEmpty_stack(top))
     {
-        //push(top_copy, pop(&top));
         addAtEnd(top_copy, pop(&top));
     }
 
 }
 
 /*
-void ordonare(Node *head_list)
+Team maxim2(Node *head_list, Team team_max1)
 {
-    Node *comp, *aux;
-    int ord, ok;
-
-    do{
-        comp = head_list;
-        ok=1;
-        while(comp != NULL)
+    float max2=0;
+    Team team_max2;
+    
+    while(head_list != NULL)
+    {
+        if(head_list->val.punctaj_echipa == team_max1.punctaj_echipa && strcmp(head_list->val.nume_echipa, team_max1.nume_echipa)!=0)
         {
-            if(comp->val.punctaj_echipa > comp->next->val.punctaj_echipa)
-            {
-                aux = comp;
-                comp = comp->next;
-
-            }
+            printf("bag pl");
+            team_max2 = head_list->val;
+            max2 = head_list->val.punctaj_echipa;
+            return team_max2;
         }
 
+        if(head_list->val.punctaj_echipa > max2 && head_list->val.punctaj_echipa < team_max1.punctaj_echipa)
+        {
+            team_max2 = head_list->val;
+            max2 = head_list->val.punctaj_echipa;
+        }
+        
+        head_list = head_list->next;
     }
+    
+    return team_max2;
 
-    do{
-    comp=prim;
-
-      ord=1;
-
-      while(c->next)
-
-             {if(c->info > c->next->info)
-
-                        {aux=c->info;
-
-                        c->info=c->next->info;
-
-                        c->next->info=aux;
-
-                        ord=0;
-
-                        }
-
-              c=c->next;}
-
-      }
-
-    while(ok==0);
-
-  }
+}
 */
+
+/*
+void top_n(Node *head_list, FILE* write_file)
+{
+
+    Team max1 = maxim(head_list);
+    printf("%s\n", max1.nume_echipa);
+    afisare_winners(max1, write_file);
+
+    Team max2, aux;
+    int n=5;
+    
+    do{
+    max2 = maxim2(head_list, max1);
+    afisare_winners(max2, write_file);
+    printf("%s\n", max2.nume_echipa);
+    max1 = max2;
+    n--;
+    }while(n!=0);
+    
+    
+    max2 = maxim2(head_list, max1);
+    afisare_winners(max2, write_file); 
+    printf("max1: %s\n", max1.nume_echipa);
+    max1 = max2;
+    printf("max 2: %s\n", max2.nume_echipa);
+
+    max2 = maxim2(head_list, max1);
+    afisare_winners(max2, write_file); 
+    printf("max1: %s\n", max1.nume_echipa);
+    max1 = max2;
+    printf("max 2: %s\n", max2.nume_echipa);
+
+    max2 = maxim2(head_list, max1);
+    afisare_winners(max2, write_file); 
+    printf("max1: %s\n", max1.nume_echipa);
+    max1 = max2;
+    printf("max 2: %s\n", max2.nume_echipa);
+
+    max2 = maxim2(head_list, max1);
+    afisare_winners(max2, write_file); 
+    printf("max1: %s\n", max1.nume_echipa);
+    max1 = max2;
+    printf("max 2: %s\n", max2.nume_echipa);
+
+    max2 = maxim2(head_list, max1);
+    printf("max 2: %s\n", max2.nume_echipa);
+    //afisare_winners(max2, write_file);
+    //printf("max1: %s\n", max1.nume_echipa);
+}
+*/
+
+Team maxim(Node *head_list)
+{
+    float max=0;
+    Team team_max;
+    
+    while(head_list != NULL)
+    {
+        if(head_list->val.punctaj_echipa >= max)
+        {
+            team_max = head_list->val;
+            max = head_list->val.punctaj_echipa;
+        }
+
+        head_list = head_list->next;
+    }
+    
+    return team_max;
+
+}
+
+void eliminare(Node **head_list, Team max)
+{
+    if(strcmp((*head_list)->val.nume_echipa, max.nume_echipa) == 0)
+        eliminare_primul(head_list);
+    else
+        while((*head_list)->next != NULL)
+        {
+            if(strcmp((*head_list)->next->val.nume_echipa, max.nume_echipa) == 0)
+                eliminare_urmator(head_list);
+
+            (*head_list) = (*head_list)->next;
+        }
+
+    display_list(*head_list);
+
+}
+
+void top_n(Node **head_list, FILE* write_file)
+{
+    int n=8;
+    do{
+    Team max1 = maxim(*head_list);
+    printf("%s\n", max1.nume_echipa);
+    afisare_winners(max1, write_file);
+    eliminare(head_list, max1);
+    n--;
+    }while(n!=1);
+
+}
+
 
 void task3(QGame **q, int *nr_echipe, Node **top_win, FILE* write_file)
 {
@@ -459,7 +536,7 @@ void task3(QGame **q, int *nr_echipe, Node **top_win, FILE* write_file)
     lista_null(top_copy); // check
     top_copy = NULL;
 
-    int i=2;
+    int i=2, n_top=8;
     (*nr_echipe) /= 2;
     Team team;
 
@@ -488,12 +565,6 @@ void task3(QGame **q, int *nr_echipe, Node **top_win, FILE* write_file)
     }
 
     fprintf(write_file, "\nTOP 8 TEAMS:\n");
-    while(!isEmpty_stack(top_copy))
-    {
-        team = top_copy->val;
-        afisare_winners(team, write_file);
-
-        top_copy = top_copy->next;
-    }
+    top_n(&top_copy, write_file);
 
 }

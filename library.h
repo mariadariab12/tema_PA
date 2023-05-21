@@ -22,4 +22,8 @@ void move_win_to_queue_and_fdisplay(QGame **q, Node **top_win, FILE* write_file)
 void afisare_winners(Team team, FILE* write_file);
 void afisare_win_round(Node *top_win, int i, FILE* write_file);
 void copiere_stiva(Node *top, Node **top_copy);
+Team maxim(Node *head_list);
+//Team maxim2(Node *head_list, Team team_max1);
+void eliminare(Node **head_list, Team max);
+void top_n(Node **head_list, FILE* write_file);
 void task3(QGame **q, int *nr_echipe, Node **top_win, FILE* write_file);
