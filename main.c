@@ -3,7 +3,7 @@
 int main(int argc, char *argv[])
 {
     //ca sa salvez
-    
+
     int cerinte[5];
     FILE *cerinte_file = fopen("c.in", "r");
     vector_cerinte(cerinte_file, cerinte);
@@ -35,3 +35,6 @@ int main(int argc, char *argv[])
     return 0;
 
 }
+
+//teste verificate: 5, 14
+//seg fault: 8, 10
