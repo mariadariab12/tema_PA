@@ -30,6 +30,9 @@ typedef struct QGame{
    Node_Game *front, *rear; 
 }QGame;
 
-
-
+//task 4
+typedef struct Node_tree{
+    Data val;
+    struct Node_tree *left, *right;
+}Node_tree;
 

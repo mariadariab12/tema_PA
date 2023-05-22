@@ -44,6 +44,15 @@ void fisier_null(FILE *read_file)
     }
 }
 
+void root_null(Node_tree *root)
+{
+	if (root == NULL)
+    {
+        printf("Failed to allocate memory for head_list\n");
+        exit(1);
+    }
+}
+
 //queue
 /*
 QGame* createQueue_Game(){
@@ -168,41 +177,183 @@ void display_stack(Node *top)
 
 }
 
+//bst
+Node_tree* newNode(Data data) 
+{
+	Node_tree* node = (Node_tree*)malloc(sizeof(Node_tree));
+	node->val = data;
+	node->left = node->right = NULL;
+	return node;
+}
+
+Node_tree* insert(Node_tree *node, Data key) 
+{
+	if (node == NULL) return newNode(key);
+
+	if (key.punctaj_echipa < node->val.punctaj_echipa)
+		node->left  = insert(node->left, key);
+	else if (key.punctaj_echipa > node->val.punctaj_echipa)
+		node->right = insert(node->right, key);
+    else
+        if(strcmp(key.nume_echipa, node->val.nume_echipa) < 0)
+            node->left  = insert(node->left, key);
+        else node->right = insert(node->right, key);
+
+    return node;
+}
+
+void preorder(Node_tree *root) 
+{
+	if (root){
+		printf("%s ",root->val.nume_echipa);
+		preorder(root->left);
+		preorder(root->right);
+	}
+}
+
+Node_tree* search(Node_tree* root, Data key) 
+{
+	if (root == NULL || root->val.punctaj_echipa == key.punctaj_echipa)
+		return root;
+	if (root->val.punctaj_echipa < key.punctaj_echipa)
+		return search(root->right, key);
+	if (root->val.punctaj_echipa > key.punctaj_echipa)
+        return search(root->left, key);
+    if(strcmp(key.nume_echipa, root->val.nume_echipa) < 0)
+		return search(root->right, key);
+    return search(root->left, key); 
+
+	return 0;
+}
+
+Node_tree *min_value(Node_tree *root)
+{
+	Node_tree * aux = root ; // cauta nodul cel mai din stanga
+	while ( aux->left != NULL )
+		aux = aux->left;
+	return aux ;
+}
+
+Node_tree *max_value(Node_tree *root)
+{
+	Node_tree * aux = root; // cauta nodul cel mai din dreapta
+	while ( aux->right != NULL )
+		aux = aux->right;
+	return aux ;
+}
+
 /*
-int isEmpty_stack(Node_Game* top){
-    return top==NULL;
+Node_tree *delete_node(Node_tree *root , Data key) 
+{
+	if ( root == NULL ) return root ;
+	// apeleaza pana la gasirea nodului
+	if (key.punctaj_echipa < root->val.punctaj_echipa)
+		root->left = delete_node(root->left, key);
+	else if (key.punctaj_echipa > root->val.punctaj_echipa)
+		root->left = delete_node(root->left, key);
+	else if(strcmp(key.nume_echipa, root->val.nume_echipa) < 0)
+		root->left = delete_node(root->left, key);
+	else if(strcmp(key.nume_echipa, root->val.nume_echipa) > 0)
+		root->right = delete_node(root->right, key);
+	else
+	{
+	// daca nodul nu are 2 copii
+	if ( root->left == NULL )
+	{
+		Node_tree *temp = root ; // retine adresa
+		// locul lui e luat de copilul drept
+		root = root->right ;
+		free(temp); // sterge nodul
+		return root ;
+	}
+	else if ( root->right == NULL )
+	{
+		Node_tree *temp = root;
+		root = root->left;
+		free(temp);
+		return root;
+	}
+	// daca are doi copii , cauta minimul in subarborele drept(inordine)
+	Node_tree * temp = min_value(root->right);
+	// copiaza valoarea in nodul de sters
+	root->val = temp->val;
+	// sterge nodul care continea min, cautand de la nodul de sters in adancime dupa cheie
+	root->right = delete_node(root->right, temp->val);
 }
-
-Data top(Node_Game *top, Team* team_1, Team* team_2){
-    if (isEmpty_stack(top)) printf("is empty!");
-    else{
-    (*team_1)=top->team1;
-    (*team_2)=top->team2;
-    }
+	return root ;
 }
-
-void push(Node_Game** top, Team team_1, Team team_2) {
-    Node_Game* newNode=(Node_Game*)malloc(sizeof(Node_Game));
-    newNode->team1=team_1;
-    newNode->team2=team_2;
-    newNode->next=*top;
-    *top=newNode;
-}
-
-void pop(Node_Game**top, Team* team_1, Team* team_2) {
-    if (isEmpty_stack(*top)) return;
-    Node_Game *temp=(*top);
-    (*team_1)=temp->team1;
-    (*team_2)=temp->team2;
-    *top=(*top)->next;
-    free(temp);
-}
-
-void deleteStack(Node_Game** top){
-    Node_Game  *temp;
-    while (!isEmpty_stack(*top))
-        temp=*top;
-        *top=(*top)->next;
-        free(temp);
-    }
 */
+/*
+void delete_node(Node_tree **root , Data key) 
+{
+	if (*root == NULL) return;
+	// apeleaza pana la gasirea nodului
+	if (key.punctaj_echipa < (*root)->val.punctaj_echipa)
+		delete_node(&((*root)->left), key);
+	else if (key.punctaj_echipa > (*root)->val.punctaj_echipa)
+		delete_node(&((*root)->left), key);
+	else if(strcmp(key.nume_echipa, (*root)->val.nume_echipa) < 0)
+		delete_node(&((*root)->left), key);
+	else if(strcmp(key.nume_echipa, (*root)->val.nume_echipa) > 0)
+		delete_node(&((*root)->right), key);
+	else
+	{
+	// daca nodul nu are 2 copii
+	if ( (*root)->left == NULL )
+	{
+		Node_tree *temp = (*root) ; // retine adresa
+		// locul lui e luat de copilul drept
+		(*root) = (*root)->right ;
+		free(temp); // sterge nodul
+	}
+	else if ((*root)->right == NULL)
+	{
+		Node_tree *temp = (*root);
+		(*root) = (*root)->left;
+		free(temp);
+	}
+	// daca are doi copii , cauta minimul in subarborele drept(inordine)
+	Node_tree * temp = min_value((*root)->right);
+	// copiaza valoarea in nodul de sters
+	(*root)->val = temp->val;
+	// sterge nodul care continea min, cautand de la nodul de sters in adancime dupa cheie
+	delete_node(&((*root)->right), temp->val);
+}
+
+}
+*/
+void delete_node(Node_tree **root, Data key) {
+    if (*root == NULL)
+        return;
+
+    if (key.punctaj_echipa < (*root)->val.punctaj_echipa)
+        delete_node(&((*root)->left), key);
+    else if (key.punctaj_echipa > (*root)->val.punctaj_echipa)
+        delete_node(&((*root)->right), key);
+    else if (strcmp(key.nume_echipa, (*root)->val.nume_echipa) < 0)
+        delete_node(&((*root)->left), key);
+    else if (strcmp(key.nume_echipa, (*root)->val.nume_echipa) > 0)
+        delete_node(&((*root)->right), key);
+    else {
+        if ((*root)->left == NULL && (*root)->right == NULL) {
+            // Nodul este o frunză
+            free(*root);
+            *root = NULL;
+        } else if ((*root)->left == NULL) {
+            // Nodul are doar un copil pe partea dreaptă
+            Node_tree *temp = *root;
+            *root = (*root)->right;
+            free(temp);
+        } else if ((*root)->right == NULL) {
+            // Nodul are doar un copil pe partea stângă
+            Node_tree *temp = *root;
+            *root = (*root)->left;
+            free(temp);
+        } else {
+            // Nodul are doi copii
+            Node_tree *min_right = min_value((*root)->right);
+            (*root)->val = min_right->val;
+            delete_node(&((*root)->right), min_right->val);
+        }
+    }
+}

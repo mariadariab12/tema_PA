@@ -12,6 +12,7 @@ void addAtEnd(Node** head, Data v);
 //check
 void lista_null(Node* head_list);
 void fisier_null(FILE* read_file);
+void root_null(Node_tree *root);
 
 //queue
 //QGame* createQueue_Game();
@@ -28,3 +29,14 @@ void push(Node**top, Data v);
 Data pop(Node**top);
 void deleteStack(Node**top);
 void display_stack(Node *top);
+
+//bst
+Node_tree* newNode(Data data);
+Node_tree* insert(Node_tree *node, Data key);
+void preorder(Node_tree *root);
+Node_tree* search(Node_tree* root, Data key);
+Node_tree *min_value(Node_tree *root);
+Node_tree *max_value(Node_tree *root);
+void delete_node(Node_tree **root , Data key);
+//Node_tree *delete_node(Node_tree *root , Data key);
+

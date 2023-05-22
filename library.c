@@ -456,13 +456,17 @@ void top_n(Node **head_list, int n, FILE* write_file)
 }
 
 
-void task3(QGame **q, int *nr_echipe, Node **top_win, FILE* write_file)
+void task3(QGame **q, int *nr_echipe, Node **top_win, FILE* write_file, Node **tree_list)
 {
     Node *top_lose, *top_copy;
 
     top_copy = (Node *)malloc(sizeof(Node));
     lista_null(top_copy); // check
     top_copy = NULL;
+
+    *tree_list = (Node *)malloc(sizeof(Node));
+    lista_null(*tree_list); // check
+    *tree_list = NULL;
 
     int i=2, n_top=8;
     (*nr_echipe) /= 2;
@@ -477,6 +481,7 @@ void task3(QGame **q, int *nr_echipe, Node **top_win, FILE* write_file)
         if((*nr_echipe) == n_top)
         {
             copiere_stiva(*top_win, &top_copy);
+            copiere_stiva(*top_win, tree_list);
         }
 
         afisare_win_round(*top_win, i, write_file);
@@ -496,3 +501,31 @@ void task3(QGame **q, int *nr_echipe, Node **top_win, FILE* write_file)
     top_n(&top_copy, n_top, write_file);
 
 }
+
+//task4
+void creare_bst(Node *tree_list, Node_tree **root)
+{
+    (*root) = (Node_tree *)malloc(sizeof(Node_tree));
+    root_null(*root); // check list
+    *root = NULL;
+
+    while(tree_list != NULL)
+    {
+        *root = insert(*root, tree_list->val);
+        tree_list = tree_list->next;
+    }
+
+}
+
+void top_descresc(Node_tree **root, int n_top, FILE *write_file)
+{
+    fprintf(write_file, "\nTOP %d TEAMS:\n", n_top);
+    Node_tree *max;
+    do{
+    max = max_value(*root);
+    afisare_winners(max->val, write_file);
+    delete_node(root, max->val);
+    n_top--;
+    }while(n_top != 0);
+}
+

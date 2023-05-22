@@ -13,7 +13,6 @@ int main()
 
     calcul_punctaj_echipa(&head_list);
 
-    
     task2(&head_list, &nr_echipe, write_file);
 
 
@@ -29,7 +28,14 @@ int main()
     //display_stack(top_lose);
     //printf("%d\n", (q->front == NULL));
 
-    task3(&q, &nr_echipe, &top_win, write_file);
+    Node *tree_list;
+    task3(&q, &nr_echipe, &top_win, write_file, &tree_list);
+
+    //task4
+    Node_tree* root;
+    creare_bst(tree_list, &root);
+    int n_top=8;
+    top_descresc(&root, n_top, write_file);
 
     fclose(read_file);
     fclose(write_file);
