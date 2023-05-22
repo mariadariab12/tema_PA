@@ -2,6 +2,8 @@
 
 int main(int argc, char *argv[])
 {
+    //ca sa salvez
+    
     int cerinte[5];
     FILE *cerinte_file = fopen("c.in", "r");
     vector_cerinte(cerinte_file, cerinte);
