@@ -92,7 +92,8 @@ int task1(FILE *read_file, Node **head_list, FILE *write_file)
 {
     int nr_echipe = team_file_read(read_file, head_list);
 
-    //f_display_list(*head_list, write_file);
+    f_display_list(*head_list, write_file);
+    fprintf(write_file, "\n");
 
     return nr_echipe;
 }
@@ -210,9 +211,7 @@ void task2(Node **head_list, int *nr_echipe, FILE* write_file)
         }
     }
 
-    f_display_list(*head_list, write_file);
-
-    printf("\n nr echipe: %d\n", (*nr_echipe));
+    //f_display_list(*head_list, write_file);
 }
 
 // task3

@@ -322,7 +322,8 @@ void delete_node(Node_tree **root , Data key)
 
 }
 */
-void delete_node(Node_tree **root, Data key) {
+void delete_node(Node_tree **root, Data key) 
+{
     if (*root == NULL)
         return;
 
