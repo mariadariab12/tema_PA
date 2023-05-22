@@ -1,5 +1,16 @@
 #include "library.h"
 
+void vector_cerinte(FILE *cerinte_file, int cerinte[])
+{
+    fisier_null(cerinte_file); // check fis
+    int i, n=5;
+    for(i=0; i<n; i++)
+    {
+        fscanf(cerinte_file, "%d", &cerinte[i]);
+    }
+}
+
+//task1
 void atribuire_juc(FILE *read_file, Team echipa, int j)
 {
     int points;
@@ -21,7 +32,6 @@ int team_file_read(FILE *read_file, Node **head_list)
 
     int nr_echipe;
     fscanf(read_file, "%d", &nr_echipe);
-    printf("Nr echipe: %d\n", nr_echipe);
 
     (*head_list) = (Node *)malloc(sizeof(Node));
     lista_null(*head_list); // check list
@@ -88,12 +98,15 @@ void f_display_list(Node *head, FILE* write_file)
 }
 
 
-int task1(FILE *read_file, Node **head_list, FILE *write_file)
+int task1(FILE *read_file, Node **head_list, FILE *write_file, int cerinte[])
 {
     int nr_echipe = team_file_read(read_file, head_list);
 
+    if(cerinte[0]==1 && cerinte[1]==0)
+    {
     f_display_list(*head_list, write_file);
     fprintf(write_file, "\n");
+    }
 
     return nr_echipe;
 }
@@ -168,7 +181,7 @@ int calculare_N(int nr_echipe)
     return j - 1;
 }
 
-void task2(Node **head_list, int *nr_echipe, FILE* write_file)
+void task2(Node **head_list, int *nr_echipe, FILE* write_file, int cerinte[])
 {
     int N = calculare_N((*nr_echipe));
 
@@ -210,13 +223,13 @@ void task2(Node **head_list, int *nr_echipe, FILE* write_file)
             aux = aux->next;
         }
     }
-
-    //f_display_list(*head_list, write_file);
+    if(cerinte[1] == 1)
+        f_display_list(*head_list, write_file);
 }
 
 // task3
 
-void creare_meciuri(QGame **q, Node *head_list, FILE* write_file)
+void creare_meciuri(QGame **q, Node *head_list, FILE* write_file, int cerinte[])
 {
     (*q)=(QGame *)malloc(sizeof(QGame));
 	if ((*q)==NULL) 
@@ -228,7 +241,8 @@ void creare_meciuri(QGame **q, Node *head_list, FILE* write_file)
 	(*q)->front=(*q)->rear=NULL;
 
     int nr=33;
-    fprintf(write_file, "\n--- ROUND NO:1\n");
+    if(cerinte[2] == 1)
+        fprintf(write_file, "\n--- ROUND NO:1\n");
 
 
     while (head_list != NULL)
@@ -239,15 +253,17 @@ void creare_meciuri(QGame **q, Node *head_list, FILE* write_file)
             break;
         }
 
-        fprintf(write_file, "%s", head_list->val.nume_echipa);
         int nr_spatii = nr - strlen(head_list->val.nume_echipa);
+        if(cerinte[2] == 1){
+        fprintf(write_file, "%s", head_list->val.nume_echipa);
         fprintf(write_file, "%*s", nr_spatii, " ");
-        fprintf(write_file, "-");
+        fprintf(write_file, "-");}
 
-        nr_spatii = nr -strlen(head_list->next->val.nume_echipa);
+        if(cerinte[2] == 1){
+        nr_spatii = nr - strlen(head_list->next->val.nume_echipa);
         fprintf(write_file, "%*s", nr_spatii, " ");
         fprintf(write_file, "%s", head_list->next->val.nume_echipa);
-        fprintf(write_file, "\n");
+        fprintf(write_file, "\n");}
 
         head_list = (head_list->next)->next;
     }
@@ -313,7 +329,7 @@ void runda(QGame *q, Node** top_win, Node** top_lose, int i, FILE* write_file)
 
 }
 
-void move_win_to_queue_and_fdisplay(QGame **q, Node **top_win, FILE* write_file)
+void move_win_to_queue_and_fdisplay(QGame **q, Node **top_win, FILE* write_file, int cerinte[])
 {
     (*q)=(QGame *)malloc(sizeof(QGame));
 	if ((*q)==NULL) 
@@ -331,17 +347,19 @@ void move_win_to_queue_and_fdisplay(QGame **q, Node **top_win, FILE* write_file)
 
         if(isEmpty_stack(*top_win) == 1) break;
 
-        fprintf(write_file, "%s", add_team1.nume_echipa);
         int nr_spatii = nr - strlen(add_team1.nume_echipa);
+        if(cerinte[2] == 1){
+        fprintf(write_file, "%s", add_team1.nume_echipa);
         fprintf(write_file, "%*s", nr_spatii, " ");
-        fprintf(write_file, "-");
+        fprintf(write_file, "-");}
 
         add_team2 = pop(top_win);
 
         nr_spatii = nr -strlen(add_team2.nume_echipa);
+        if(cerinte[2] == 1){
         fprintf(write_file, "%*s", nr_spatii, " ");
         fprintf(write_file, "%s", add_team2.nume_echipa);
-        fprintf(write_file, "\n");
+        fprintf(write_file, "\n");}
 
         enQueue(q, add_team1, add_team2);
     }
@@ -351,24 +369,24 @@ void move_win_to_queue_and_fdisplay(QGame **q, Node **top_win, FILE* write_file)
 void afisare_winners(Team team, FILE* write_file)
 {
     int nr=34, nr_spatii;
-    fprintf(write_file, "%s", team.nume_echipa);
     nr_spatii = nr -strlen(team.nume_echipa);
+    fprintf(write_file, "%s", team.nume_echipa);
     fprintf(write_file, "%*s", nr_spatii, " ");
     fprintf(write_file, "-  ");
     fprintf(write_file, "%.2f\n", team.punctaj_echipa);
 }
 
-void afisare_win_round(Node *top_win, int i, FILE* write_file)
+void afisare_win_round(Node *top_win, int i, FILE* write_file, int cerinte[])
 {
     Team add_team1, add_team2, winner;
     int nr=33;
 
-    fprintf(write_file, "\nWINNERS OF ROUND NO:%d\n", i-1);
+    if(cerinte[2] == 1) fprintf(write_file, "\nWINNERS OF ROUND NO:%d\n", i-1);
 
     while(!isEmpty_stack(top_win))
     {
         add_team1 = pop(&top_win);
-        afisare_winners(add_team1, write_file);
+        if(cerinte[2] == 1) afisare_winners(add_team1, write_file);
 
         if(isEmpty_stack(top_win) == 1) 
         {
@@ -376,7 +394,7 @@ void afisare_win_round(Node *top_win, int i, FILE* write_file)
         }
        
         add_team2 = pop(&top_win);
-        afisare_winners(add_team2, write_file);
+        if(cerinte[2] == 1) afisare_winners(add_team2, write_file);
 
     }
 
@@ -443,11 +461,11 @@ void eliminare(Node** head_list, Team max)
 
 }
 
-void top_n(Node **head_list, int n, FILE* write_file)
+void top_n(Node **head_list, int n, FILE* write_file, int cerinte[])
 {
     do{
     Team max1 = maxim(*head_list);
-    afisare_winners(max1, write_file);
+    if(cerinte[2] == 1) afisare_winners(max1, write_file);
     eliminare(head_list, max1);
     n--;
     }while(n!=0);
@@ -455,7 +473,7 @@ void top_n(Node **head_list, int n, FILE* write_file)
 }
 
 
-void task3(QGame **q, int *nr_echipe, Node **top_win, FILE* write_file, Node **tree_list)
+void task3(QGame **q, int *nr_echipe, Node **top_win, FILE* write_file, Node **tree_list, int cerinte[])
 {
     Node *top_lose, *top_copy;
 
@@ -483,21 +501,20 @@ void task3(QGame **q, int *nr_echipe, Node **top_win, FILE* write_file, Node **t
             copiere_stiva(*top_win, tree_list);
         }
 
-        afisare_win_round(*top_win, i, write_file);
+        if(cerinte[2] == 1) afisare_win_round(*top_win, i, write_file, cerinte);
 
         if((*nr_echipe) == 1) break;
 
-        fprintf(write_file, "\n--- ROUND NO:%d\n", i);
+        if(cerinte[2] == 1) fprintf(write_file, "\n--- ROUND NO:%d\n", i);
         i++;
 
-        move_win_to_queue_and_fdisplay(q, top_win, write_file); 
-
+        move_win_to_queue_and_fdisplay(q, top_win, write_file, cerinte); 
 
         (*nr_echipe) /= 2;
     }
 
-    fprintf(write_file, "\nTOP %d TEAMS:\n", n_top);
-    top_n(&top_copy, n_top, write_file);
+    if(cerinte[2] == 1) fprintf(write_file, "\nTOP %d TEAMS:\n", n_top);
+    top_n(&top_copy, n_top, write_file, cerinte);
 
 }
 
@@ -516,13 +533,13 @@ void creare_bst(Node *tree_list, Node_tree **root)
 
 }
 
-void top_descresc(Node_tree **root, int n_top, FILE *write_file)
+void top_descresc(Node_tree **root, int n_top, FILE *write_file, int cerinte[])
 {
-    fprintf(write_file, "\nTOP %d TEAMS:\n", n_top);
+    if(cerinte[3] == 1) fprintf(write_file, "\nTOP %d TEAMS:\n", n_top);
     Node_tree *max;
     do{
     max = max_value(*root);
-    afisare_winners(max->val, write_file);
+    if(cerinte[3] == 1) afisare_winners(max->val, write_file);
     delete_node(root, max->val);
     n_top--;
     }while(n_top != 0);
