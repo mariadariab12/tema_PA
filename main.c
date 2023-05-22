@@ -1,6 +1,6 @@
 #include"library.h"
 
-int main()
+int main(int argc, char *argv[])
 {
     int cerinte[5];
     FILE *cerinte_file = fopen("c.in", "r");
@@ -11,11 +11,11 @@ int main()
     read_file = fopen("d.in", "r");
     write_file = fopen("r.out", "w");
     int nr_echipe = task1(read_file, &head_list, write_file, cerinte);
-
+    
     //task 2
     calcul_punctaj_echipa(&head_list);
     task2(&head_list, &nr_echipe, write_file, cerinte);
-
+    
     //task 3
     QGame *q;
     creare_meciuri(&q, head_list, write_file, cerinte);

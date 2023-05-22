@@ -540,7 +540,8 @@ void top_descresc(Node_tree **root, int n_top, FILE *write_file, int cerinte[])
     Node_tree *max;
     do{
     max = max_value(*root);
-    if(cerinte[3] == 1) afisare_winners(max->val, write_file);
+    //if(cerinte[3] == 1) afisare_winners(max->val, write_file);
+    afisare_winners(max->val, write_file);
     delete_node(root, max->val);
     n_top--;
     }while(n_top != 0);
