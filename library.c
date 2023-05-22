@@ -89,12 +89,13 @@ void display_list(Node *head)
 
 void f_display_list(Node *head, FILE* write_file)
 {
-    while (head != NULL)
+    while (head->next != NULL)
     {
         fprintf(write_file, "%s", head->val.nume_echipa);
         fprintf(write_file, "\n");
         head = head->next;
     }
+    fprintf(write_file, "%s", head->val.nume_echipa);
 }
 
 
