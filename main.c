@@ -20,7 +20,6 @@ int main()
     QGame *q;
 
     creare_meciuri(&q, head_list, write_file);
-    displayQueue(q);
     //printf("%d", (q->front == NULL));
     Node* top_win;
     Node *top_lose;

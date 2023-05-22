@@ -25,5 +25,5 @@ void copiere_stiva(Node *top, Node **top_copy);
 Team maxim(Node *head_list);
 //Team maxim2(Node *head_list, Team team_max1);
 void eliminare(Node **head_list, Team max);
-void top_n(Node **head_list, FILE* write_file);
+void top_n(Node **head_list, int n, FILE* write_file);
 void task3(QGame **q, int *nr_echipe, Node **top_win, FILE* write_file);
