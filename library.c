@@ -51,6 +51,13 @@ int team_file_read(FILE *read_file, Node **head_list)
 
         echipa.nr_juc = nr_juc;
         strcpy(echipa.nume_echipa, nume_echipa);
+        if(echipa.nume_echipa[strlen(echipa.nume_echipa)- 2] == ' ')
+            {
+                echipa.nume_echipa[strlen(echipa.nume_echipa)-2] = '\0';
+                //echipa.nume_echipa[strlen(echipa.nume_echipa)] = 'a';
+            }
+        else 
+            echipa.nume_echipa[strlen(echipa.nume_echipa)-1] = '\0';
 
         echipa.jucator = (struct Player *)malloc(echipa.nr_juc * sizeof(struct Player));
 
@@ -105,8 +112,8 @@ int task1(FILE *read_file, Node **head_list, FILE *write_file, int cerinte[])
 
     if(cerinte[0]==1 && cerinte[1]==0)
     {
-    f_display_list(*head_list, write_file);
-    fprintf(write_file, "\n");
+        f_display_list(*head_list, write_file);
+        fprintf(write_file, "\n");
     }
 
     return nr_echipe;
@@ -197,6 +204,7 @@ void task2(Node **head_list, int *nr_echipe, FILE* write_file, int cerinte[])
         min = punctaj_min(*head_list);
 
         // cazul in care primul element trebuie eliminat
+       
         if ((*head_list)->val.punctaj_echipa == min)
         {
             eliminare_primul(head_list);
@@ -224,6 +232,7 @@ void task2(Node **head_list, int *nr_echipe, FILE* write_file, int cerinte[])
             aux = aux->next;
         }
     }
+
     if(cerinte[1] == 1)
         f_display_list(*head_list, write_file);
 }
@@ -243,13 +252,13 @@ void creare_meciuri(QGame **q, Node *head_list, FILE* write_file, int cerinte[])
 
     int nr=33;
     if(cerinte[2] == 1)
-        fprintf(write_file, "\n--- ROUND NO:1\n");
+        fprintf(write_file, "\n\n--- ROUND NO:1\n");
 
 
     while (head_list != NULL)
     {
         enQueue(q, head_list->val, head_list->next->val);
-        if (head_list->next->next == NULL)
+        if (head_list->next == NULL)
         {
             break;
         }
@@ -410,7 +419,7 @@ void copiere_stiva(Node *top, Node **top_copy)
 
 }
 
-
+/*
 Team maxim(Node *head_list)
 {
     float max=0;
@@ -472,15 +481,18 @@ void top_n(Node **head_list, int n, FILE* write_file, int cerinte[])
     }while(n!=0);
 
 }
-
+*/
 
 void task3(QGame **q, int *nr_echipe, Node **top_win, FILE* write_file, Node **tree_list, int cerinte[])
 {
-    Node *top_lose, *top_copy;
+    Node *top_lose;
+    /*
+    Node *top_copy;
 
     top_copy = (Node *)malloc(sizeof(Node));
     lista_null(top_copy); // check
     top_copy = NULL;
+    */
 
     *tree_list = (Node *)malloc(sizeof(Node));
     lista_null(*tree_list); // check
@@ -498,7 +510,7 @@ void task3(QGame **q, int *nr_echipe, Node **top_win, FILE* write_file, Node **t
 
         if((*nr_echipe) == n_top)
         {
-            copiere_stiva(*top_win, &top_copy);
+            //copiere_stiva(*top_win, &top_copy);
             copiere_stiva(*top_win, tree_list);
         }
 
@@ -514,8 +526,8 @@ void task3(QGame **q, int *nr_echipe, Node **top_win, FILE* write_file, Node **t
         (*nr_echipe) /= 2;
     }
 
-    if(cerinte[2] == 1) fprintf(write_file, "\nTOP %d TEAMS:\n", n_top);
-    top_n(&top_copy, n_top, write_file, cerinte);
+    //if(cerinte[2] == 1) fprintf(write_file, "\nTOP %d TEAMS:\n", n_top);
+    //top_n(&top_copy, n_top, write_file, cerinte);
 
 }
 
@@ -536,7 +548,9 @@ void creare_bst(Node *tree_list, Node_tree **root)
 
 void top_descresc(Node_tree **root, int n_top, FILE *write_file, int cerinte[])
 {
-    if(cerinte[3] == 1) fprintf(write_file, "\nTOP %d TEAMS:\n", n_top);
+    if(cerinte[3] == 1)
+    {
+    fprintf(write_file, "\nTOP %d TEAMS:\n", n_top);
     Node_tree *max;
     do{
     max = max_value(*root);
@@ -545,5 +559,6 @@ void top_descresc(Node_tree **root, int n_top, FILE *write_file, int cerinte[])
     delete_node(root, max->val);
     n_top--;
     }while(n_top != 0);
+    }
 }
 

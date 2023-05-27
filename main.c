@@ -2,23 +2,23 @@
 
 int main(int argc, char *argv[])
 {
-    //ca sa salvez
-
     int cerinte[5];
-    FILE *cerinte_file = fopen("c.in", "r");
+    FILE *cerinte_file = fopen(argv[1], "r");
     vector_cerinte(cerinte_file, cerinte);
     //task 1
     Node* head_list;
     FILE *read_file, *write_file;
-    read_file = fopen("d.in", "r");
-    write_file = fopen("r.out", "w");
+    read_file = fopen(argv[2], "r");
+    write_file = fopen(argv[3], "w");
     int nr_echipe = task1(read_file, &head_list, write_file, cerinte);
     
     //task 2
     calcul_punctaj_echipa(&head_list);
     task2(&head_list, &nr_echipe, write_file, cerinte);
+    //fprintf(write_file, "\n");
     
     //task 3
+    
     QGame *q;
     creare_meciuri(&q, head_list, write_file, cerinte);
     Node* top_win, *top_lose, *tree_list;
@@ -35,6 +35,3 @@ int main(int argc, char *argv[])
     return 0;
 
 }
-
-//teste verificate: 5, 14
-//seg fault: 8, 10
