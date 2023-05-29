@@ -1,3 +1,4 @@
+//task 1
 typedef struct Player{
     char* firstName;
     char* secondName;

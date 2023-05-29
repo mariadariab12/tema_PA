@@ -53,18 +53,6 @@ void root_null(Node_tree *root)
     }
 }
 
-//queue
-/*
-QGame* createQueue_Game(){
-	QGame **q;
-	(*q)=(QGame *)malloc(sizeof(QGame));
-	if ((*q)==NULL) return NULL;
-	(*q)->front=(*q)->rear=NULL;
-
-	return (*q);
-}
-*/
-
 void enQueue(QGame **q, Team team_1, Team team_2){
 	Node_Game* newNode=(Node_Game*)malloc(sizeof(Node_Game));
 	newNode->team1=team_1;
@@ -243,86 +231,6 @@ Node_tree *max_value(Node_tree *root)
 	return aux ;
 }
 
-/*
-Node_tree *delete_node(Node_tree *root , Data key) 
-{
-	if ( root == NULL ) return root ;
-	// apeleaza pana la gasirea nodului
-	if (key.punctaj_echipa < root->val.punctaj_echipa)
-		root->left = delete_node(root->left, key);
-	else if (key.punctaj_echipa > root->val.punctaj_echipa)
-		root->left = delete_node(root->left, key);
-	else if(strcmp(key.nume_echipa, root->val.nume_echipa) < 0)
-		root->left = delete_node(root->left, key);
-	else if(strcmp(key.nume_echipa, root->val.nume_echipa) > 0)
-		root->right = delete_node(root->right, key);
-	else
-	{
-	// daca nodul nu are 2 copii
-	if ( root->left == NULL )
-	{
-		Node_tree *temp = root ; // retine adresa
-		// locul lui e luat de copilul drept
-		root = root->right ;
-		free(temp); // sterge nodul
-		return root ;
-	}
-	else if ( root->right == NULL )
-	{
-		Node_tree *temp = root;
-		root = root->left;
-		free(temp);
-		return root;
-	}
-	// daca are doi copii , cauta minimul in subarborele drept(inordine)
-	Node_tree * temp = min_value(root->right);
-	// copiaza valoarea in nodul de sters
-	root->val = temp->val;
-	// sterge nodul care continea min, cautand de la nodul de sters in adancime dupa cheie
-	root->right = delete_node(root->right, temp->val);
-}
-	return root ;
-}
-*/
-/*
-void delete_node(Node_tree **root , Data key) 
-{
-	if (*root == NULL) return;
-	// apeleaza pana la gasirea nodului
-	if (key.punctaj_echipa < (*root)->val.punctaj_echipa)
-		delete_node(&((*root)->left), key);
-	else if (key.punctaj_echipa > (*root)->val.punctaj_echipa)
-		delete_node(&((*root)->left), key);
-	else if(strcmp(key.nume_echipa, (*root)->val.nume_echipa) < 0)
-		delete_node(&((*root)->left), key);
-	else if(strcmp(key.nume_echipa, (*root)->val.nume_echipa) > 0)
-		delete_node(&((*root)->right), key);
-	else
-	{
-	// daca nodul nu are 2 copii
-	if ( (*root)->left == NULL )
-	{
-		Node_tree *temp = (*root) ; // retine adresa
-		// locul lui e luat de copilul drept
-		(*root) = (*root)->right ;
-		free(temp); // sterge nodul
-	}
-	else if ((*root)->right == NULL)
-	{
-		Node_tree *temp = (*root);
-		(*root) = (*root)->left;
-		free(temp);
-	}
-	// daca are doi copii , cauta minimul in subarborele drept(inordine)
-	Node_tree * temp = min_value((*root)->right);
-	// copiaza valoarea in nodul de sters
-	(*root)->val = temp->val;
-	// sterge nodul care continea min, cautand de la nodul de sters in adancime dupa cheie
-	delete_node(&((*root)->right), temp->val);
-}
-
-}
-*/
 void delete_node(Node_tree **root, Data key) 
 {
     if (*root == NULL)

@@ -13,8 +13,10 @@ int task1(FILE *read_file, Node **head_list, FILE *write_file, int cerinte[]);
 int calculare_N(int nr_echipe);
 void calcul_punctaj_echipa(Node** head_list);
 float punctaj_min(Node* head_list);
+void free_echipa(Node **head_list);
 void eliminare_primul(Node** head_list);
 void eliminare_urmator(Node** nod_anterior);
+int if_seg_fault(Node *aux);
 void task2(Node **head_list, int *nr_echipe, FILE* write_file, int cerinte[]);
 
 //task3
@@ -39,6 +41,7 @@ void top_descresc(Node_tree **root, int n_top, FILE *write_file, int cerinte[], 
 Node* find_node(Node *head_list, int i); //gaseste al i-lea nod
 Node_tree* add_left(Node_tree *node_curent, int i_curent, Node* head_task5);
 Node_tree* add_right(Node_tree *node_curent, int i_curent, Node* head_task5);
-void parcurgere_nivel(Node_tree *root, FILE* write_file);
+void parcurgere_nivel(Node_tree *root, FILE* write_file, int nivel);
 void avl_tree(Node_tree** root_avl, Node *tree_list, int nr_top);
-void task5(Node_tree *root, FILE* write_file, int cerinte[]);
+void free_root(Node_tree **root);
+void task5(Node_tree *root, FILE* write_file, int cerinte[], int nivel);

@@ -38,5 +38,5 @@ Node_tree* search(Node_tree* root, Data key);
 Node_tree *min_value(Node_tree *root);
 Node_tree *max_value(Node_tree *root);
 void delete_node(Node_tree **root , Data key);
-//Node_tree *delete_node(Node_tree *root , Data key);
+
 
