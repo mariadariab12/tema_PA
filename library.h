@@ -7,6 +7,7 @@ void atribuire_juc(FILE *read_file, Team echipa, int j);
 int team_file_read(FILE *read_file, Node** head_list);
 void display_list(Node* head);
 void f_display_list(Node *head, FILE* write_file);
+void proba_display_list(Node *head);
 int task1(FILE *read_file, Node **head_list, FILE *write_file, int cerinte[]);
 //task2
 int calculare_N(int nr_echipe);
@@ -32,4 +33,12 @@ void task3(QGame **q, int *nr_echipe, Node **top_win, FILE* write_file, Node **t
 
 //task4
 void creare_bst(Node *tree_list, Node_tree **root);
-void top_descresc(Node_tree **root, int n_top, FILE *write_file, int cerinte[]);
+void top_descresc(Node_tree **root, int n_top, FILE *write_file, int cerinte[], Node** head_task5);
+
+//task5
+Node* find_node(Node *head_list, int i); //gaseste al i-lea nod
+Node_tree* add_left(Node_tree *node_curent, int i_curent, Node* head_task5);
+Node_tree* add_right(Node_tree *node_curent, int i_curent, Node* head_task5);
+void parcurgere_nivel(Node_tree *root, FILE* write_file);
+void avl_tree(Node_tree** root_avl, Node *tree_list, int nr_top);
+void task5(Node_tree *root, FILE* write_file, int cerinte[]);

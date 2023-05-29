@@ -105,6 +105,20 @@ void f_display_list(Node *head, FILE* write_file)
     fprintf(write_file, "%s", head->val.nume_echipa);
 }
 
+void proba_display_list(Node *head)
+{
+    printf("\n\n\n\n");
+    while (head->next != NULL)
+    {
+        printf("%s %f", head->val.nume_echipa, head->val.punctaj_echipa);
+        printf("\n");
+        head = head->next;
+    }
+    printf("%s", head->val.nume_echipa);
+
+    printf("\n\n\n\n");
+}
+
 
 int task1(FILE *read_file, Node **head_list, FILE *write_file, int cerinte[])
 {
@@ -180,7 +194,7 @@ int calculare_N(int nr_echipe)
 {
     int maxim = 1;
     int j = 0;
-    while (maxim < nr_echipe)
+    while (maxim <= nr_echipe)
     {
         maxim *= 2;
         j++;
@@ -199,6 +213,7 @@ void task2(Node **head_list, int *nr_echipe, FILE* write_file, int cerinte[])
 
     float min;
 
+    int contor_minim = 1;
     while (contor_ech_el < nr_ech_el)
     {
         min = punctaj_min(*head_list);
@@ -217,17 +232,29 @@ void task2(Node **head_list, int *nr_echipe, FILE* write_file, int cerinte[])
         for (i = 0; i < (*nr_echipe) && contor_ech_el < nr_ech_el; i++)
         {
 
-            if (aux->next->val.punctaj_echipa == min)
+            while (aux->next->val.punctaj_echipa == min)
             {
                 eliminare_urmator(&aux);
                 contor_ech_el++;
                 (*nr_echipe)--;
+
+                if (aux->next == NULL)
+                {
+                    break;
+                } else if (aux->next->next == NULL)
+                {
+                    break;
+                }
             }
 
-            if (aux->next->next == NULL)
+            if (aux->next == NULL)
+            {
+                break;
+            } else if (aux->next->next == NULL)
             {
                 break;
             }
+
 
             aux = aux->next;
         }
@@ -535,7 +562,7 @@ void task3(QGame **q, int *nr_echipe, Node **top_win, FILE* write_file, Node **t
 void creare_bst(Node *tree_list, Node_tree **root)
 {
     (*root) = (Node_tree *)malloc(sizeof(Node_tree));
-    root_null(*root); // check list
+    root_null(*root); // check root
     *root = NULL;
 
     while(tree_list != NULL)
@@ -546,19 +573,197 @@ void creare_bst(Node *tree_list, Node_tree **root)
 
 }
 
-void top_descresc(Node_tree **root, int n_top, FILE *write_file, int cerinte[])
+void top_descresc(Node_tree **root, int n_top, FILE *write_file, int cerinte[], Node** head_task5)
 {
+    
+    (*head_task5) = (Node *)malloc(sizeof(Node));
+    lista_null(*head_task5); // check head
+    *head_task5 = NULL;
+
     if(cerinte[3] == 1)
     {
-    fprintf(write_file, "\nTOP %d TEAMS:\n", n_top);
-    Node_tree *max;
-    do{
-    max = max_value(*root);
-    //if(cerinte[3] == 1) afisare_winners(max->val, write_file);
-    afisare_winners(max->val, write_file);
-    delete_node(root, max->val);
-    n_top--;
-    }while(n_top != 0);
+        fprintf(write_file, "\nTOP %d TEAMS:\n", n_top);
+        Node_tree *max;
+        do
+        {
+            max = max_value(*root);
+            //if(cerinte[3] == 1) afisare_winners(max->val, write_file);
+            afisare_winners(max->val, write_file);
+            addAtBeginning(head_task5, max->val);
+            delete_node(root, max->val);
+            n_top--;
+        }
+        while(n_top != 0);
+
     }
 }
 
+//task5
+Node* find_node(Node *head_list, int i) //gaseste al i-lea nod
+{
+    int k=1;
+    Node* aux;
+    //Node* parcurgere = *head_list;
+    while(head_list != NULL && k<=i)
+    {
+        aux = head_list;
+        head_list = head_list->next;
+        k++;
+    }
+
+    //printf("%s head: %s\n\n\n", aux->val.nume_echipa, (head_list)->val.nume_echipa);
+    return aux;
+}
+
+
+/*
+void add_left_right(Node_tree **node_curent, int i_curent, int n,  Node* tree_list)
+{
+    Node *left, *right; 
+    left = find_node(tree_list, i_curent - pow(2,n));
+    (*node_curent)->left->val = left->val;
+    right = find_node(tree_list, i_curent + pow(2,n));
+    (*node_curent)->right->val = right->val;
+}
+
+void avl_tree(Node_tree** root_avl, Node *tree_list, int nr_top)
+{
+    int N = calculare_N(nr_top);
+
+    (*root_avl) = (Node_tree *)malloc(sizeof(Node_tree));
+    root_null(*root_avl); // check root
+    *root_avl = NULL;
+
+    Node* node_to_add;
+    int i_curent = (nr_top/2)+1;
+    node_to_add = find_node(tree_list, i_curent);
+    (*root_avl)->val = node_to_add->val;
+
+    int n = N-2;
+    Node_tree *nod_curent;
+    nod_curent = (*root_avl);
+
+    while(n > 0)
+    {
+        add_left_right(&(nod_curent->left), i_curent, n, tree_list);
+        add_left_right(&(nod_curent->right), i_curent, n, tree_list);
+        n--;
+    }
+
+}
+*/
+
+Node_tree* add_left(Node_tree *node_curent, int i_curent, Node* head_task5)
+{
+    //i_curent = i_curent - pow(2,n);
+    Node* left = find_node(head_task5, i_curent);
+    node_curent->left = (Node_tree*) malloc(sizeof(Node_tree));
+    node_curent->left->val = left->val;
+    node_curent->left->h = node_curent->h + 1;
+    node_curent->left->left = NULL;
+    node_curent->left->right = NULL;
+    return node_curent->left;
+}
+
+Node_tree* add_right(Node_tree *node_curent, int i_curent, Node* head_task5)
+{
+    Node* right = find_node(head_task5, i_curent);
+    node_curent->right = (Node_tree*) malloc(sizeof(Node_tree));
+    node_curent->right->val = right->val;
+    node_curent->right->h = node_curent->h + 1;
+    node_curent->right->left = NULL;
+    node_curent->right->right = NULL;
+    return node_curent->right;
+}
+
+void parcurgere_nivel(Node_tree *root, FILE* write_file) 
+{
+    if (root != NULL) 
+	{
+        if(root->h == 2)
+            fprintf(write_file, "%s\n", root->val.nume_echipa);
+		parcurgere_nivel(root->right, write_file);
+		parcurgere_nivel(root->left, write_file);
+	}
+}
+
+void avl_tree(Node_tree** root_avl, Node *head_task5, int nr_top)
+{
+    int N = calculare_N(nr_top);
+    (*root_avl) = (Node_tree *)malloc(sizeof(Node_tree));
+    root_null(*root_avl); // check root
+    *root_avl = NULL;
+
+    Node* node_to_add;
+    int i_curent = (nr_top/2)+1;
+    node_to_add = find_node(head_task5, i_curent);
+    (*root_avl) = newNode(node_to_add->val);
+    (*root_avl)->h = 0;
+
+    Node_tree *nod_curent;
+    nod_curent = (*root_avl);
+
+    int n = N-2;
+    //nivel1
+    nod_curent->left = add_left(nod_curent, i_curent - pow(2,n), head_task5);
+    nod_curent->right = add_right(nod_curent, i_curent + pow(2,n), head_task5);
+
+    //nivel2
+    nod_curent->left->left = add_left(nod_curent->left, i_curent - pow(2,n)-1, head_task5);
+    nod_curent->right->right = add_right(nod_curent->left, i_curent - pow(2,n)+1, head_task5);
+    nod_curent->right->left = add_left(nod_curent->right, i_curent + pow(2,n)-1, head_task5);
+    nod_curent->right->right = add_right(nod_curent->right, i_curent + pow(2,n)+1, head_task5);
+
+    //nivel3
+    nod_curent->left->left->left = add_left(nod_curent->left->left, 1, head_task5);
+
+}
+
+void task5(Node_tree *root, FILE* write_file, int cerinte[])
+{
+    if(cerinte[4] == 1)
+    {
+        fprintf(write_file, "\nTHE LEVEL 2 TEAMS ARE:\n");
+        parcurgere_nivel(root, write_file);
+    }
+}
+
+/*
+void avl_tree(Node_tree** root_avl, Node *tree_list, int nr_top)
+{
+    int N = calculare_N(nr_top);
+    //printf("N: %d\n", N);
+    (*root_avl) = (Node_tree *)malloc(sizeof(Node_tree));
+    root_null(*root_avl); // check root
+    //*root_avl = NULL;
+
+    Node* node_to_add;
+    int i_curent = (nr_top/2)+1;
+    printf("i: %d\n", i_curent);
+    node_to_add = find_node(tree_list, i_curent);
+
+    (*root_avl) = newNode(node_to_add->val);
+    //(*root_avl)->val = node_to_add->val;
+
+    int n = N-2;
+    //printf("%d", n);
+    Node_tree *nod_curent;
+    nod_curent = (*root_avl);
+
+    //nod_curent->left = add_left(nod_curent, i_curent, n, tree_list);
+    //nod_curent->right = add_right(nod_curent, i_curent, n, tree_list);
+    //n--;
+
+    while(n > -1)
+    {
+        nod_curent->left = add_left(nod_curent, i_curent, n, tree_list);
+        nod_curent->right = add_right(nod_curent, i_curent, n, tree_list);
+        //nod_curent->right->left = add_left(nod_curent->right, i_curent, n, tree_list);
+        //nod_curent->right->right = add_right(nod_curent->right, i_curent, n, tree_list);
+
+        n--;
+    }
+
+    preorder(*root_avl);
+}
+*/

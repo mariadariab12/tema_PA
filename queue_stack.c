@@ -204,7 +204,8 @@ Node_tree* insert(Node_tree *node, Data key)
 
 void preorder(Node_tree *root) 
 {
-	if (root){
+	if (root != NULL) 
+	{
 		printf("%s ",root->val.nume_echipa);
 		preorder(root->left);
 		preorder(root->right);
