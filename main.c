@@ -40,6 +40,7 @@ int main(int argc, char *argv[])
     task5(root_avl, write_file, cerinte, nivel);
     }
     
+    fclose(cerinte_file);
     fclose(read_file);
     fclose(write_file);
     return 0;
