@@ -13,7 +13,7 @@ Task 2
 - functie pentru a calcula punctajul fiecarei echipe - medie aritmetica
 - folosind functiile create, se executa dupa urmatorul principiu:
 	- se calculeaza cate echipe trebuie eliminate pentru a ajunge la acel 2^N
-	- se calculeaza punctajul minim existent in lista dupa fiecare data cand s-au eliminat 			toate echipele cu punctajul minim anterior/initial iar numarul nu a ajuns inca la 2^N
+	- se calculeaza punctajul minim existent in lista dupa fiecare data cand s-au eliminat toate echipele cu punctajul minim anterior/initial iar numarul nu a ajuns inca la 2^N
 	- se elimina echipele cu acel punctaj minim, fara a depasi pragul
 	-in final, se afiseaza lista dupa eliminarea elementelor
 	
